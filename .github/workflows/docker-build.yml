@@ -21,6 +21,9 @@ jobs:
       # Checkout the code
       - name: Checkout code
         uses: actions/checkout@v2
+      # Maximize build disk space (remove unwanted software)
+      - name: Maximize build disk space
+        uses: AdityaGarg8/remove-unwanted-software@v4.1
 
       # Set up Docker Buildx for multi-platform builds
       - name: Set up Docker Buildx
