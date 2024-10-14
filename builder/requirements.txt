@@ -1,11 +1,13 @@
 ray
 pandas
 pyarrow
-runpod~=1.7.0
+runpod
 huggingface-hub
 packaging
-typing-extensions==4.7.1
+typing-extensions
 pydantic
 pydantic-settings
 hf-transfer
 transformers
+mistral-common
+
