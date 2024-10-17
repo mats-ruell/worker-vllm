@@ -15,17 +15,15 @@ from vllm.entrypoints.openai.serving_engine import BaseModelPath
 
 from utils import DummyRequest, JobInput, BatchSize, create_error_response
 from constants import DEFAULT_MAX_CONCURRENCY, DEFAULT_BATCH_SIZE, DEFAULT_BATCH_SIZE_GROWTH_FACTOR, DEFAULT_MIN_BATCH_SIZE
-from tokenizer import TokenizerWrapper
 from engine_args import get_engine_args
+from mistral_common.tokens.tokenizers.mistral import MistralTokenizer
 
 class vLLMEngine:
     def __init__(self, engine = None):
         load_dotenv() # For local development
         self.engine_args = get_engine_args()
         logging.info(f"Engine args: {self.engine_args}")
-        self.tokenizer = TokenizerWrapper(self.engine_args.tokenizer or self.engine_args.model, 
-                                          self.engine_args.tokenizer_revision, 
-                                          self.engine_args.trust_remote_code)
+        self.tokenizer = MistralTokenizer.from_model("pixtral")
         self.llm = self._initialize_llm() if engine is None else engine.llm
         self.max_concurrency = int(os.getenv("MAX_CONCURRENCY", DEFAULT_MAX_CONCURRENCY))
         self.default_batch_size = int(os.getenv("DEFAULT_BATCH_SIZE", DEFAULT_BATCH_SIZE))
@@ -131,12 +129,14 @@ class OpenAIvLLMEngine(vLLMEngine):
         self.chat_engine = OpenAIServingChat(
             engine_client=self.llm, 
             model_config=self.model_config,
+            chat_template=None,
             base_model_paths=self.base_model_paths,
             response_role=self.response_role,
-            chat_template=self.tokenizer.tokenizer.chat_template,
             lora_modules=None,
             prompt_adapters=None,
-            request_logger=None
+            request_logger=None,
+            enable_auto_tools=True,
+            tool_parser="mistral",
         )
         self.completion_engine = OpenAIServingCompletion(
             engine_client=self.llm, 

@@ -79,6 +79,11 @@ if __name__ == "__main__":
         "MODEL_NAME": model_path,
         "MODEL_REVISION": os.getenv("MODEL_REVISION"),
         "QUANTIZATION": os.getenv("QUANTIZATION"),
+        "TOKENIZER_MODE" : "mistral",
+        "TRUST_REMOTE_CODE" : True,
+        "ENABLE_AUTO_TOOL_CHOICE ": True,
+        "TOOL_CALL_PARSER " : "mistral",
+        "USE_V2_BLOCK_MANAGER" : True,
     }   
     
     # if os.getenv("TENSORIZE") == "1": TODO: Add back once tensorizer is ready
