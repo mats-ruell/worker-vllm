@@ -4,3 +4,9 @@ runpod.toml
 test/*
 vllm-base/vllm-*
 hf_token.txt
+/.idea/.gitignore
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/vcs.xml
+/.idea/worker-vllm.iml
