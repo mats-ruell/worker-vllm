@@ -1,12 +1,18 @@
 import os
 import json
-import logging
+
+from dotenv import load_dotenv
+from transformers import logging
 import glob
 from shutil import rmtree
 from huggingface_hub import snapshot_download
 from utils import timer_decorator
+load_dotenv()
 
-BASE_DIR = "/" 
+logging.set_verbosity_info()
+
+
+BASE_DIR = "/"
 TOKENIZER_PATTERNS = [["*.json", "tokenizer*"]]
 MODEL_PATTERNS = [["*.safetensors"], ["*.bin"], ["*.pt"]]
 
@@ -37,7 +43,7 @@ def download(name, revision, type, cache_dir):
                                     allow_patterns=pattern_set)
             for pattern in pattern_set:
                 if glob.glob(os.path.join(path, pattern)):
-                    logging.info(f"Successfully downloaded {pattern} model files.")
+                    print(f"Successfully downloaded {pattern} model files.")
                     return path
     except ValueError:
         raise ValueError(f"No patterns matching {pattern_sets} found for download.")
@@ -79,7 +85,7 @@ if __name__ == "__main__":
         "MODEL_NAME": model_path,
         "MODEL_REVISION": os.getenv("MODEL_REVISION"),
         "QUANTIZATION": os.getenv("QUANTIZATION"),
-        "TOKENIZER_MODE" : "mistral",
+        "TOKENIZER_MODE" : "auto",
         "TRUST_REMOTE_CODE" : True,
         "ENABLE_AUTO_TOOL_CHOICE ": True,
         "TOOL_CALL_PARSER " : "mistral",
